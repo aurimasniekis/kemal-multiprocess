@@ -3,7 +3,9 @@ require "kemal/config"
 module Kemal::MultiProcess
 
   class Config < Kemal::Config
-    property process_count : Int
+    INSTANCE = Config.new
+
+    property process_count
 
     def initialize
       super
@@ -11,13 +13,12 @@ module Kemal::MultiProcess
       @process_count = 2
     end
 
-    private def setup_log_handler
-      @logger ||= if @logging
-                    Kemal::MultiProcess::CommonLogHandler.new
-                  else
-                    Kemal::NullLogHandler.new
-                  end
-      HANDLERS.insert(1, @logger.not_nil!)
+    def process_count
+      @process_count
+    end
+
+    def process_count=(process_count : Int32)
+      @process_count = process_count
     end
   end
 

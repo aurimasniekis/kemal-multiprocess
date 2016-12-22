@@ -3,7 +3,7 @@ require "./kemal-multiprocess/*"
 module Kemal
 
   def self.runMultiProcess(port = nil)
-    Kemal::CLI.new
+    Kemal::MultiProcess::CLI.new
     config = Kemal::MultiProcess.config
     config.setup
     config.port = port if port
@@ -38,16 +38,16 @@ module Kemal
         end
       end
 
-      processes = []
+      processes = [] of Process
       config.process_count.times do |num|
         process = Process.fork
 
-        if process.is_nil?
+        if process.nil?
           config.running = true
           config.server.listen
           exit
         else
-          log "Process #{num} spawned\n"
+          log "[#{config.env}] Kemal Process #{num} spawned"
         end
 
         processes << process
@@ -57,7 +57,7 @@ module Kemal
 
       processes.each do |process|
         process.wait
-        log "Process #{process.pid} exited\n"
+        log "[#{config.env}] Kemal Process #{process.pid} exited\n"
       end
     end
   end

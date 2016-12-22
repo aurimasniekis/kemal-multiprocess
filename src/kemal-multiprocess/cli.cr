@@ -5,7 +5,9 @@ module Kemal::MultiProcess
 
   class CLI < Kemal::CLI
     def initialize
-      @config = Konfig::MultiProcess.config
+      super
+
+      @config = Kemal::MultiProcess::Config.config
     end
 
     def parse
@@ -16,5 +18,6 @@ module Kemal::MultiProcess
           @config.process_count = opt_num.to_i
         end
       end
+    end
   end
 end

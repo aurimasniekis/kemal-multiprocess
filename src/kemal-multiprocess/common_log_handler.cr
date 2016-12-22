@@ -13,7 +13,7 @@ module Kemal::MultiProcess
     end
 
     def write(message)
-      @handler << "[" << Process.pid << "] " message
+      @handler << "[" << Process.pid << "] " << message
     end
   end
 end
